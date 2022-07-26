@@ -7,6 +7,9 @@ import { Card } from 'reactstrap';
 import { Col } from 'reactstrap';
 import { CardTitle } from 'reactstrap';
 import { CardText } from 'reactstrap';
+import {Howl, Howler} from "howler";
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 
 function HighLow(props) {
 
@@ -21,6 +24,8 @@ function HighLow(props) {
   const [leftTrack, setLeftTrack] = useState('');
   const [rightTrack, setRightTrack] = useState('');
   const [score, setScore] = useState(0);
+  const [curSong, setCurSong] = useState('');
+
 
   useEffect (() => {
 
@@ -43,7 +48,7 @@ function HighLow(props) {
       getPlaylists(props.accountID)
     }
   }, [token]);
-
+ 
   useEffect (() => {
     if (playlists !== [] && token !== "") {
       getTracks(playlists)
@@ -153,9 +158,32 @@ function HighLow(props) {
   }
 
   function sleep(time){
-    return new Promise((resolve)=>setTimeout(resolve,time)
-  )
-}
+    return new Promise((resolve)=>setTimeout(resolve,time))
+  }
+
+  const handlePlay = (src) => {
+    const sound = new Howl ({
+      src,
+      html5: true,
+    });
+    sound.play();
+    setCurSong(sound);
+  }
+
+  const handlePause = () => {
+    curSong.pause()
+    setCurSong('');
+  }
+
+  Howler.volume(0.05);
+
+  const isSomethingPlaying = () => {
+    if (curSong === ''){
+      return false
+    }
+    return true
+  }
+
 
 
   return (
@@ -164,7 +192,7 @@ function HighLow(props) {
 
       {gameActive ? 
       <div>
-        <Row style={{height: '100vh', backgroundColor: '#050524'}}>
+        <Row style={{height: '100vh', backgroundColor: '#050524'}}>   
           <Col sm="1"></Col>
           <Col sm="4">
             <Card body style={{backgroundColor: '#050524', marginTop: '30%', color:'white'}}> 
@@ -175,7 +203,16 @@ function HighLow(props) {
               <CardText>
                 by <br/>
                 <h3>{leftTrack?.track?.artists[0]?.name}</h3> <br/>
-                <h4>Popularity Score: {leftTrack.track.popularity}</h4> <br/>                
+                <h4>Popularity Score: {leftTrack.track.popularity}</h4> <br/>  
+
+                {leftTrack?.track?.preview_url && !(isSomethingPlaying()) && 
+                <PlayCircleOutlineIcon onClick = {() => handlePlay(leftTrack?.track?.preview_url)}/>     
+                }
+
+                {leftTrack?.track?.preview_url && isSomethingPlaying() &&  
+                <PauseCircleOutlineIcon onClick = {() => handlePause()}/>
+                }        
+                
               </CardText>
             </Card>
           </Col>
@@ -191,13 +228,21 @@ function HighLow(props) {
               <CardText> 
                 by <br/>
                   <h3>{rightTrack?.track?.artists[0]?.name}</h3> <br/>
+                  
 
-                  {/* <h4>Popularity Score: {rightTrack.track.popularity}</h4> */}
+                {rightTrack?.track?.preview_url && !(isSomethingPlaying()) && 
+                <PlayCircleOutlineIcon onClick = {() => handlePlay(rightTrack?.track?.preview_url)}/>     
+                }
+
+                {rightTrack?.track?.preview_url && isSomethingPlaying() &&  
+                <PauseCircleOutlineIcon onClick = {() => handlePause()}/>
+                }
+
               </CardText>
               <Button variant="contained" color="success" style={{width:'50%', marginLeft: '25%'}} onClick = {() => handleHigher(leftTrack, rightTrack)}> 
                 Higher
               </Button>
-              <Button variant="contained" color="error" style={{width:'50%', marginLeft: '25%'}} onClick = {() => handleLower(leftTrack, rightTrack)} >
+              <Button variant="contained" color="error" style={{width:'50%', marginLeft: '25%'}} onClick = {() => handleLower(leftTrack, rightTrack)} > 
                 Lower
               </Button> 
             </Card>
