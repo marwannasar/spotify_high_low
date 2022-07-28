@@ -59,9 +59,10 @@ function HighLow(props) {
     if (tracksFlag === true && playlists !== [] && token !== "") {
       //console.log("tracks: " + tracks.length, tracks)
       setGameActive(true)
-      startGame(tracks)
+      startGame(tracks) 
     }
   }, [tracksFlag]);
+
 
 
   const startGame = (songs) => {
@@ -79,16 +80,13 @@ function HighLow(props) {
   }
 
   const getRandomTrack = (songs) => {
+    // console.log(songs)
+ 
     const minn = 0;
     var maxx = songs.length - 1;
     var randomNumber = Math.floor(minn + Math.random() * (maxx - minn));
-    const randPlaylist = songs[randomNumber];
+    const randTrack = songs[randomNumber];
 
-    maxx = randPlaylist.length - 1
-    randomNumber = Math.floor(minn + Math.random() * (maxx - minn));
-    const randTrack = randPlaylist[randomNumber]
-
-    // console.log(randTrack)
     return randTrack
   }
 
@@ -141,7 +139,6 @@ function HighLow(props) {
       }
     }
     var PLAYLIST_ID;
-    // const GET_USER_TRACKS_URL = "https://api.spotify.com/v1/playlists/2UDgWc41JpM2Y2ZYTQ8M3d/tracks"
     const GET_USER_TRACKS_URL = "https://api.spotify.com/v1/playlists/"
 
     playlists.items.map ((item) => {
@@ -149,8 +146,13 @@ function HighLow(props) {
 
       fetch(GET_USER_TRACKS_URL + PLAYLIST_ID + "/tracks", trackParams)
       .then((response) => response.json())
-      // .then(data => console.log(data.items)) overhere
-      .then(data => setTracks(prevState => [...prevState, data.items]))
+      // .then(data => console.log(data.items)) 
+      .then(data => {
+        for (let i = 0; i < data.items.length; i++){
+          setTracks(prevState => [...prevState, data.items[i]])
+          // console.log(data.items[i])
+        }
+      })
       .catch((err) => console.log(err))
     })
     await sleep(400) // find a better way this is garbage
