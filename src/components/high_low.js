@@ -144,18 +144,20 @@ function HighLow(props) {
     playlists.items.map ((item) => {
       PLAYLIST_ID = item.id
 
-      fetch(GET_USER_TRACKS_URL + PLAYLIST_ID + "/tracks", trackParams)
+      fetch(GET_USER_TRACKS_URL + PLAYLIST_ID + "/tracks", trackParams) 
       .then((response) => response.json())
       // .then(data => console.log(data.items)) 
       .then(data => {
         for (let i = 0; i < data.items.length; i++){
-          setTracks(prevState => [...prevState, data.items[i]])
+          if (data.items[i].track.popularity >= 10) {
+            setTracks(prevState => [...prevState, data.items[i]])
+          }
           // console.log(data.items[i])
         }
       })
       .catch((err) => console.log(err))
     })
-    await sleep(400) // find a better way this is garbage
+    await sleep(1000) // find a better way this is garbage
     setTracksFlag(true) 
   }
 
