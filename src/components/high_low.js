@@ -10,6 +10,7 @@ import { CardText } from 'reactstrap';
 import {Howl, Howler} from "howler";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+import CountUp from 'react-countup';
 
 function HighLow(props) {
 
@@ -188,6 +189,8 @@ function HighLow(props) {
     return true
   }
 
+  const bgColor = "#1A1A1A"; //#1A1A1A
+  const transition = false;
 
 
   return (
@@ -196,17 +199,20 @@ function HighLow(props) {
 
       {gameActive ? 
       <div>
-        <Row style={{height: '100vh', backgroundColor: '#050524'}}>   
-          <Col sm="1"></Col>
+        <Row style={{height: '100vh', backgroundColor: bgColor}}>   
+          <Col sm="1" style={{height: '100vh', backgroundColor: '#FB2323'}} onClick = {() => handleLower(leftTrack, rightTrack)}>
+            <h1 style={{position: 'relative', top:'50%'}}>Lower</h1>
+          </Col>
           <Col sm="4">
-            <Card body style={{backgroundColor: '#050524', marginTop: '30%', color:'white'}}> 
+            <Card body style={{backgroundColor: bgColor, marginTop: '30%', color:'white', border:'none'}}> 
               <CardTitle tag="h1">
                 <img src={leftTrack?.track?.album.images[1].url} alt=""/> <br/>
                 {leftTrack?.track?.name} 
               </CardTitle>
               <CardText>
                 by <br/>
-                <h3>{leftTrack?.track?.artists[0]?.name}</h3> <br/>
+                <h3>{leftTrack?.track?.artists[0]?.name}</h3> <br/> 
+
                 <h4>Popularity Score: {leftTrack.track.popularity}</h4> <br/>  
 
                 {leftTrack?.track?.preview_url && !(isSomethingPlaying()) && 
@@ -215,16 +221,28 @@ function HighLow(props) {
 
                 {leftTrack?.track?.preview_url && isSomethingPlaying() &&  
                 <PauseCircleOutlineIcon onClick = {() => handlePause()}/>
-                }        
-                
+                }  
+
               </CardText>
             </Card>
           </Col>
           
-          <Col sm="2"><h5 style={{color:'white'}}>Score: {score}</h5></Col>
+          <Col sm="2" style={{height: '100vh', backgroundColor: bgColor, color:'white'}}>
+            <h5>Score: {score}</h5>
+            <h1 style={{position:'relative', top:'45%'}}>VS</h1>
+            
+
+            {/* <Button variant="contained" color="success" style={{width:'50%', marginLeft: '0%'}} onClick = {() => handleHigher(leftTrack, rightTrack)}> 
+                Higher
+            </Button>
+            <Button variant="contained" color="error" style={{width:'50%', marginLeft: '0%'}} onClick = {() => handleLower(leftTrack, rightTrack)} > 
+              Lower
+            </Button>  */}
+
+          </Col>
 
           <Col sm="4">
-            <Card body style={{backgroundColor: '#050524', marginTop: '30%', color:'white'}}>
+            <Card body style={{backgroundColor: bgColor, marginTop: '30%', color:'white', border:'none'}}>
               <CardTitle tag="h1">
                 <img src={rightTrack?.track?.album.images[1].url} alt=""/> <br/>
                 {rightTrack?.track?.name}
@@ -233,29 +251,26 @@ function HighLow(props) {
                 by <br/>
                   <h3>{rightTrack?.track?.artists[0]?.name}</h3> <br/>
                   
+                  <h4>Popularity Score: {transition ? <CountUp end={rightTrack.track.popularity}/> : '???'}</h4> <br/>  
 
                 {rightTrack?.track?.preview_url && !(isSomethingPlaying()) && 
                 <PlayCircleOutlineIcon onClick = {() => handlePlay(rightTrack?.track?.preview_url)}/>     
                 }
 
                 {rightTrack?.track?.preview_url && isSomethingPlaying() &&  
-                <PauseCircleOutlineIcon onClick = {() => handlePause()}/>
+                <PauseCircleOutlineIcon onClick = {() => handlePause()}/> 
                 }
 
               </CardText>
-              <Button variant="contained" color="success" style={{width:'50%', marginLeft: '25%'}} onClick = {() => handleHigher(leftTrack, rightTrack)}> 
-                Higher
-              </Button>
-              <Button variant="contained" color="error" style={{width:'50%', marginLeft: '25%'}} onClick = {() => handleLower(leftTrack, rightTrack)} > 
-                Lower
-              </Button> 
             </Card>
           </Col>
-          <Col sm="1"></Col>
+          <Col sm="1" style={{height: '100vh', backgroundColor: '#23FB30'}} onClick = {() => handleHigher(leftTrack, rightTrack)}>
+            <h1 style={{position: 'relative', top:'50%'}}>Higher</h1>
+          </Col>
           
         </Row>
       </div> : 
-      <div style={{height: '100vh', backgroundColor: '#050524', color:'white'}}>
+      <div style={{height: '100vh', backgroundColor: bgColor, color:'white'}}>
         <h1>Your Score is: {score}</h1>
         <Button variant="contained" color="success" style={{width:'50%'}} onClick = {() => handleRestart()} >
                 Play Again
