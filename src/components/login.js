@@ -2,9 +2,11 @@ import '../App.css';
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import FormGroup from '@mui/material/FormGroup';
 import { styled } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
+import { Row } from 'reactstrap';
+import { Card } from 'reactstrap';
+import { Col } from 'reactstrap';
+import { CardText } from 'reactstrap';
 
 const SubmitButton = styled(Button) ({
     boxShadow: 'none',
@@ -18,26 +20,33 @@ const SubmitButton = styled(Button) ({
 function Login(props) {
     
     const [input, setInput] = useState("");
+    const widthh = "30vw"
+    const widthh2 = "10vw"
+
+    const bgColor = "#1A1A1A"; //#1A1A1A
+    const heightt = "100vh"
 
   return (
-    <div className="Login">
-        <Grid container spacing={0.3} style={{marginTop:'15%', backgroundColor:'white'}}>
-            <Grid item xs={12}>
-            <h2>Insert Your Spotify ID</h2>  
-            <TextField id="outlined-basic" label="Spotify ID" variant="outlined" style = {{width: '500px'}} onInput={e => setInput(e.target.value)} />
-            </Grid>
+    <div className="Login"> 
 
-            <Grid item xs={12}>
-            <SubmitButton variant="contained" style = {{width: '500px'}} onClick={() => props.updateID(input)}>Submit</SubmitButton>
-            </Grid> 
+      <Row style={{height: heightt, backgroundColor: bgColor}}>
+        <Col sm="4"> </Col> 
+        <Col sm="4"> 
+          <Card body style={{backgroundColor: 'white', marginTop: '30vh', border:'none'}}> 
+            <CardText>
+              <h2>Insert Your Spotify ID</h2>  
+              <TextField id="outlined-basic" label="Spotify ID" variant="outlined" style = {{width: widthh}} onInput={e => setInput(e.target.value)} />
 
-            <br/> <br/>
+              <SubmitButton variant="contained" style = {{width: widthh2}} onClick={() => props.updateID(input)}>Submit</SubmitButton>
 
-            <Grid item xs={12}>
-            <Button variant="contained" style = {{width: '500px', backgroundColor:'green'}} onClick={() => props.updateID("spotify")}>Use Random Songs</Button>
-            </Grid>
-            
-      </Grid>
+              <h1> OR </h1>
+              <Button variant="contained" style = {{width: widthh, backgroundColor:'green'}} onClick={() => props.updateID("spotify")}>Use Random Songs</Button>
+            </CardText>
+          </Card>
+        </Col> 
+        <Col sm="4"> </Col> 
+
+      </Row>
     </div>
   );
 }

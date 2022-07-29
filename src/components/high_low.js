@@ -199,6 +199,7 @@ function HighLow(props) {
 
   const bgColor = "#1A1A1A"; //#1A1A1A
   const transition = false;
+  const heightt = "100vh"
 
 
   return (
@@ -207,8 +208,8 @@ function HighLow(props) {
 
       {gameActive ? 
       <div>
-        <Row style={{height: '100vh', backgroundColor: bgColor}}>    
-          <Col sm="1" style={{height: '100vh', backgroundColor: bgColor}}> </Col> 
+        <Row style={{height: heightt, backgroundColor: bgColor}}>    
+          <Col sm="1"> </Col> 
           <Col sm="4">
             <Card body style={{backgroundColor: bgColor, marginTop: '30%', color:'white', border:'none'}}> 
               <CardTitle tag="h1">
@@ -233,7 +234,7 @@ function HighLow(props) {
             </Card>
           </Col>
           
-          <Col sm="2" style={{height: '100vh', backgroundColor: bgColor, color:'white'}}>
+          <Col sm="2" style={{backgroundColor: bgColor, color:'white'}}>
             <h5>Score: {score}</h5>
             <h1 style={{position:'relative', top:'45%'}}>VS</h1>
           </Col>
@@ -276,11 +277,12 @@ function HighLow(props) {
               </CardText>
             </Card>
           </Col>
-          <Col sm="1" style={{height: '100vh', backgroundColor: bgColor}}> </Col> 
+          <Col sm="1"> </Col> 
           
         </Row>
-      </div> : 
-      <div style={{height: '100vh', backgroundColor: bgColor, color:'white'}}>
+      </div> 
+      : 
+      <div style={{backgroundColor: bgColor, color:'white', height: heightt}}>
         <h1>Your Score is: {score}</h1>
         <Button variant="contained" color="success" style={{width:'50%'}} onClick = {() => handleRestart()} >
                 Play Again
