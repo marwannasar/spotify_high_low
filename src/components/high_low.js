@@ -142,10 +142,17 @@ function HighLow(props) {
     var PLAYLIST_ID;
     const GET_USER_TRACKS_URL = "https://api.spotify.com/v1/playlists/"
 
-    playlists.items.map ((item) => {
+    playlists.items.map ((item) => { 
       PLAYLIST_ID = item.id
+      var OFFSET = 0
 
-      fetch(GET_USER_TRACKS_URL + PLAYLIST_ID + "/tracks", trackParams) 
+      if (item.tracks.total > 100) {
+        const minn = 0;
+        var maxx = item.tracks.total - 1 -100;
+        OFFSET = Math.floor(minn + Math.random() * (maxx - minn));
+      }
+
+      fetch(GET_USER_TRACKS_URL + PLAYLIST_ID + "/tracks?limit=100&offset=" + OFFSET, trackParams)  
       .then((response) => response.json())
       // .then(data => console.log(data.items)) 
       .then(data => {
