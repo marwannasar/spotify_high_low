@@ -36,10 +36,8 @@ function Login(props) {
             <CardText>
               <h2>Insert Your Spotify ID</h2>  
               <TextField id="outlined-basic" label="Spotify ID" variant="outlined" style = {{width: widthh}} onInput={e => setInput(e.target.value)} />
-
               <SubmitButton variant="contained" style = {{width: widthh2}} onClick={() => props.updateID(input)}>Submit</SubmitButton>
-
-              <h1> OR </h1>
+              <h2> OR </h2>
               <Button variant="contained" style = {{width: widthh, backgroundColor:'green'}} onClick={() => props.updateID("spotify")}>Use Random Songs</Button>
             </CardText>
           </Card>
