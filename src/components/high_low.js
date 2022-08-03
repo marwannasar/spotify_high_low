@@ -88,7 +88,6 @@ function HighLow(props) {
     var randomNumber = Math.floor(minn + Math.random() * (maxx - minn));
     const randTrack = songs[randomNumber];
 
-    console.log(randTrack)
     return randTrack
   }
 

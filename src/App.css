@@ -1,10 +1,12 @@
 .App {
-  /* background-color:azure */
+  
 }
 .HighLow {
   text-align: center;
+  overflow: hidden; 
 }
 .Login {
   text-align: center; 
+  overflow: hidden; 
 }
 

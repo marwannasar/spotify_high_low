@@ -29,7 +29,7 @@ function Login(props) {
   return (
     <div className="Login"> 
 
-      <Row style={{height: heightt, backgroundColor: bgColor}}>
+      <Row style={{height: heightt, backgroundColor: bgColor}}>   
         <Col sm="4"> </Col> 
         <Col sm="4"> 
           <Card body style={{backgroundColor: 'white', marginTop: '30vh', border:'none'}}> 
