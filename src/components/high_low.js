@@ -11,6 +11,10 @@ import {Howl, Howler} from "howler";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import CountUp from 'react-countup';
+import Stack from '@mui/material/Stack';
+import Slider from '@mui/material/Slider';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import VolumeUp from '@mui/icons-material/VolumeUp';
 
 function HighLow(props) {
 
@@ -26,6 +30,7 @@ function HighLow(props) {
   const [rightTrack, setRightTrack] = useState('');
   const [score, setScore] = useState(0);
   const [curSong, setCurSong] = useState('');
+  const [volume, setVolume] = useState(0.1);
 
 
   useEffect (() => {
@@ -59,6 +64,7 @@ function HighLow(props) {
   useEffect (() => {
     if (tracksFlag === true && playlists !== [] && token !== "") {
       //console.log("tracks: " + tracks.length, tracks)
+      Howler.volume(volume);
       setGameActive(true)
       startGame(tracks) 
     }
@@ -187,8 +193,6 @@ function HighLow(props) {
     setCurSong('');
   }
 
-  Howler.volume(0.05);
-
   const isSomethingPlaying = () => {
     if (curSong === ''){
       return false
@@ -196,18 +200,22 @@ function HighLow(props) {
     return true
   }
 
+  const handleVolume = (newVolume) => {
+    // console.log(newVolume)
+    setVolume(newVolume)
+    Howler.volume(newVolume);
+  }
+
   const bgColor = "#1A1A1A"; //#1A1A1A
   const transition = false;
   const heightt = "100vh"
-
+  
 
   return (
-    <div className="HighLow">
-      {/* {props.accountID} */}
-
+    <div>
       {gameActive ? 
-      <div>
-        <Row style={{height: heightt, backgroundColor: bgColor}}>    
+      <div className = "HighLow" style={{backgroundColor: bgColor, height: heightt}}>
+        <Row >    
           <Col sm="1"> </Col> 
           <Col sm="4">
             <Card body style={{backgroundColor: bgColor, marginTop: '30%', color:'white', border:'none'}}> 
@@ -235,7 +243,25 @@ function HighLow(props) {
           
           <Col sm="2" style={{backgroundColor: bgColor, color:'white'}}>
             <h5>Score: {score}</h5>
-            <h1 style={{position:'relative', top:'45%'}}>VS</h1>
+
+            <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
+              <VolumeOffIcon />
+              <Slider
+                aria-label="Volume"
+                defaultValue={0.1}
+                valueLabelDisplay="auto"
+                step={0.1}
+                marks
+                min={0}
+                max={1}
+                value={volume}
+                onChange = {(e) => handleVolume(e.target.value)}
+              />
+              <VolumeUp />
+            </Stack>
+
+            <h1 style={{position:'relative', top:'47%'}}>VS</h1>
+            
           </Col>
 
           <Col sm="4">
@@ -276,12 +302,14 @@ function HighLow(props) {
               </CardText>
             </Card>
           </Col>
-          <Col sm="1"> </Col> 
+          <Col sm="1"> 
+            
+          </Col> 
           
         </Row>
       </div> 
       : 
-      <div style={{backgroundColor: bgColor, color:'white', height: heightt}}>
+      <div style={{backgroundColor: bgColor, color:'white', height: heightt, textAlign: 'center'}}>
         <h1>Your Score is: {score}</h1>
         <Button variant="contained" color="success" style={{width:'50%'}} onClick = {() => handleRestart()} >
                 Play Again

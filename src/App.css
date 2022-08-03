@@ -2,11 +2,11 @@
   
 }
 .HighLow {
-  text-align: center;
-  overflow: hidden; 
+  text-align: center; 
+  overflow-x: hidden;
 }
 .Login {
   text-align: center; 
-  overflow: hidden; 
+  overflow-x: hidden;
 }
 
