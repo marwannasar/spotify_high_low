@@ -73,7 +73,7 @@ function HighLow(props) {
 
 
   const startGame = (songs) => {
-    console.log("game started");
+    console.log("game started!");
 
     setLeftTrack(getRandomTrack(songs))
     setRightTrack(getRandomTrack(songs))
