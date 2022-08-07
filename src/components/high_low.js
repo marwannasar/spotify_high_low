@@ -31,6 +31,7 @@ function HighLow(props) {
   const [score, setScore] = useState(0);
   const [curSong, setCurSong] = useState('');
   const [volume, setVolume] = useState(0.1);
+  const [transition, setTransition] = useState(false);
 
 
   useEffect (() => {
@@ -97,7 +98,10 @@ function HighLow(props) {
     return randTrack
   }
 
-  const handleHigher = (left, right) => {
+  const handleHigher = async(left, right) => {
+    setTransition(true)
+    await sleep(duration*1000 + 750)
+    setTransition(false)
     if (right.track.popularity >= left.track.popularity){    
       setScore(score + 1)
       setLeftTrack(right)
@@ -108,7 +112,10 @@ function HighLow(props) {
     }
   }
 
-  const handleLower = (left, right) => {
+  const handleLower = async(left, right) => {
+    setTransition(true)
+    await sleep(duration*1000 + 750)
+    setTransition(false)
     if (right.track.popularity <= left.track.popularity){    
       setScore(score + 1)
       setLeftTrack(right)
@@ -211,8 +218,8 @@ function HighLow(props) {
   }
 
   const bgColor = "#1A1A1A"; //#1A1A1A
-  const transition = false;
   const heightt = "100vh"
+  const duration = 0.5
   
 
   return (
@@ -278,7 +285,7 @@ function HighLow(props) {
                 by <br/>
                 <h3>{rightTrack?.track?.artists[0]?.name}</h3> <br/>
                 
-                <h4>Popularity Score: {transition ? <CountUp end={rightTrack.track.popularity}/> : '???'}</h4> <br/>  
+                <h4>Popularity Score: {transition ? <CountUp duration={duration} end={rightTrack.track.popularity}/> : '???'}</h4> <br/>  
 
                 {rightTrack?.track?.preview_url && !(isSomethingPlaying()) && 
                 <PlayCircleOutlineIcon onClick = {() => handlePlay(rightTrack?.track?.preview_url)}/> 
