@@ -119,7 +119,6 @@ function HighLow(props) {
     }
   }
 
-
   function getPlaylists(id) {
     var playlistParams = {
       method: 'GET',
@@ -137,7 +136,7 @@ function HighLow(props) {
 
   }
 
-  async function getTracks() { 
+  const getTracks = async () =>  { 
     var trackParams = {
       method: 'GET',
       headers: {
@@ -148,7 +147,10 @@ function HighLow(props) {
     var PLAYLIST_ID;
     const GET_USER_TRACKS_URL = "https://api.spotify.com/v1/playlists/"
 
-    playlists.items.map ((item) => { 
+    let promises = []
+
+    for (let i = 0; i < playlists.items.length; i++){
+      let item = playlists.items[i]
       PLAYLIST_ID = item.id
       var OFFSET = 0
 
@@ -158,9 +160,9 @@ function HighLow(props) {
         OFFSET = Math.floor(minn + Math.random() * (maxx - minn));
       }
 
-      fetch(GET_USER_TRACKS_URL + PLAYLIST_ID + "/tracks?limit=100&offset=" + OFFSET, trackParams)  
+      promises.push(fetch(GET_USER_TRACKS_URL + PLAYLIST_ID + "/tracks?limit=100&offset=" + OFFSET, trackParams)
       .then((response) => response.json())
-      // .then(data => console.log(data.items)) 
+      //.then(data => console.log(data.items)) 
       .then(data => {
         for (let i = 0; i < data.items.length; i++){
           if (data.items[i].track.popularity >= 10) {
@@ -170,8 +172,10 @@ function HighLow(props) {
         }
       })
       .catch((err) => console.log(err))
-    })
-    await sleep(1000) // find a better way this is garbage
+      )
+    }
+
+    await Promise.all(promises)
     setTracksFlag(true) 
   }
 
