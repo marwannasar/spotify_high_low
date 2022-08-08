@@ -30,7 +30,7 @@ function HighLow(props) {
   const [rightTrack, setRightTrack] = useState('');
   const [score, setScore] = useState(0);
   const [curSong, setCurSong] = useState('');
-  const [volume, setVolume] = useState(0.1);
+  const [volume, setVolume] = useState(0.4);
   const [transition, setTransition] = useState(false);
 
 
@@ -65,7 +65,7 @@ function HighLow(props) {
   useEffect (() => {
     if (tracksFlag === true && playlists !== [] && token !== "") {
       //console.log("tracks: " + tracks.length, tracks)
-      Howler.volume(volume);
+      Howler.volume(volume/divider);
       setGameActive(true)
       startGame(tracks) 
     }
@@ -214,12 +214,13 @@ function HighLow(props) {
   const handleVolume = (newVolume) => {
     // console.log(newVolume)
     setVolume(newVolume)
-    Howler.volume(newVolume);
+    Howler.volume(newVolume/divider);
   }
 
   const bgColor = "#1A1A1A"; //#1A1A1A
-  const heightt = "100vh"
-  const duration = 0.5
+  const heightt = "100vh";
+  const duration = 0.5;
+  const divider = 3;
   
 
   return (
@@ -327,8 +328,6 @@ function HighLow(props) {
         </Button> 
        
       </div>}
-
-      {/* {playlists?.items ? playlists.items.map((item) => <p>{item.name}</p>): <p>wownotthere</p>} */}
     </div>
   );
 }
