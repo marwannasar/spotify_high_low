@@ -325,7 +325,7 @@ function HighLow(props) {
         </Row>
       </div> 
       : 
-      <div style={{backgroundColor: bgColor, color:'white', height: heightt, textAlign: 'center'}}>
+      <div style={{backgroundColor: bgColor, color:'white', height: heightt, textAlign: 'center', paddingTop: '22%'}}>
         <h1>Your Score is: {score}</h1>
         <Button variant="contained" color="success" style={{width:'50%'}} onClick = {() => handleRestart()} >
                 Play Again
