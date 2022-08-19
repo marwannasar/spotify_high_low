@@ -302,13 +302,17 @@ function HighLow(props) {
 
                 <br />
                 <br />
-
-                <Button variant="contained" color="error" style={{width:'30%', marginLeft: '0%'}} onClick = {() => handleLower(leftTrack, rightTrack)} > 
-                  Lower
-                </Button>
-                <Button variant="contained" color="success" style={{width:'30%', marginLeft: '0%'}} onClick = {() => handleHigher(leftTrack, rightTrack)}> 
-                    Higher
-                </Button>
+                
+                {!transition ? 
+                <div>
+                  <Button variant="contained" color="error" style={{width:'30%', marginLeft: '0%'}} onClick = {() => handleLower(leftTrack, rightTrack)} > 
+                    Lower
+                  </Button>
+                  <Button variant="contained" color="success" style={{width:'30%', marginLeft: '0%'}} onClick = {() => handleHigher(leftTrack, rightTrack)}> 
+                      Higher
+                  </Button>
+                </div>
+                : null}
                  
 
               </CardText>
