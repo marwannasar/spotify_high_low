@@ -26,6 +26,7 @@ function HighLow(props) {
   const [tracks, setTracks] = useState([]);
   const [tracksFlag, setTracksFlag] = useState(false);
   const [gameActive, setGameActive] = useState(false);
+  const [gameLoaded, setGameLoaded] = useState(false);
   const [leftTrack, setLeftTrack] = useState('');
   const [rightTrack, setRightTrack] = useState('');
   const [score, setScore] = useState(0);
@@ -67,6 +68,7 @@ function HighLow(props) {
       //console.log("tracks: " + tracks.length, tracks)
       Howler.volume(volume/divider);
       setGameActive(true)
+      setGameLoaded(true)
       startGame(tracks) 
     }
   }, [tracksFlag]);
@@ -225,7 +227,7 @@ function HighLow(props) {
 
   return (
     <div>
-      {gameActive ? 
+      {gameActive && gameLoaded &&
       <div className = "HighLow" style={{backgroundColor: bgColor, height: heightt}}>
         <Row >    
           <Col sm="1"> </Col> 
@@ -272,7 +274,7 @@ function HighLow(props) {
               <VolumeUp />
             </Stack>
 
-            <h1 style={{position:'relative', top:'47%'}}>VS</h1>
+            <h1 style={{position:'relative', top:'40vh', justifyContent:'center'}}>VS</h1>
             
           </Col>
 
@@ -323,15 +325,22 @@ function HighLow(props) {
           </Col> 
           
         </Row>
-      </div> 
-      : 
+      </div> }
+
+      {!gameActive && gameLoaded && 
       <div style={{backgroundColor: bgColor, color:'white', height: heightt, textAlign: 'center', paddingTop: '22%'}}>
         <h1>Your Score is: {score}</h1>
         <Button variant="contained" color="success" style={{width:'50%'}} onClick = {() => handleRestart()} >
                 Play Again
         </Button> 
-       
       </div>}
+
+      {!gameLoaded && 
+      <div style={{backgroundColor: bgColor, color:'white', height: heightt, textAlign: 'center', paddingTop: '26%'}}>
+        Loading...
+      </div>
+      }
+
     </div>
   );
 }
