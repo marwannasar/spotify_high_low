@@ -264,13 +264,12 @@ function HighLow(props) {
             </Card>
           </Col>
           
-          <Col sm="2" style={{backgroundColor: bgColor, color:'white', paddingTop:'2vh'}}>
+          <Col sm="2" style={{backgroundColor: bgColor, color:'white', paddingTop:'4vh'}}>
             <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
               <VolumeOffIcon />
               <Slider
                 aria-label="Volume"
                 defaultValue={0.1}
-                valueLabelDisplay="auto"
                 step={0.1}
                 marks
                 min={0}
