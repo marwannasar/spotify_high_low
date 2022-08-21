@@ -76,7 +76,7 @@ function HighLow(props) {
 
   const startGame = (songs) => {
     console.log("game started!");
-    sethighscore(parseInt(localStorage.getItem("highscore")) ?? 0)
+    sethighscore(localStorage.getItem("highscore") ? parseInt(localStorage.getItem("highscore")) : 0)
     setLeftTrack(getRandomTrack(songs))
     setRightTrack(getRandomTrack(songs))
     
