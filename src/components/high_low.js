@@ -30,6 +30,7 @@ function HighLow(props) {
   const [leftTrack, setLeftTrack] = useState('');
   const [rightTrack, setRightTrack] = useState('');
   const [score, setScore] = useState(0);
+  const [highscore, sethighscore] = useState(0);
   const [curSong, setCurSong] = useState('');
   const [volume, setVolume] = useState(0.4);
   const [transition, setTransition] = useState(false);
@@ -73,20 +74,26 @@ function HighLow(props) {
     }
   }, [tracksFlag]);
 
-
-
   const startGame = (songs) => {
     console.log("game started!");
-
+    sethighscore(parseInt(localStorage.getItem("highscore")) ?? 0)
     setLeftTrack(getRandomTrack(songs))
     setRightTrack(getRandomTrack(songs))
     
   }
 
   const handleRestart = () => {
+    updateHighScore(score)
     setScore(0)
     setGameActive(true)
     startGame(tracks)
+  }
+
+  const updateHighScore = (score) => {
+    const highScore = parseInt(localStorage.getItem("highscore")) ?? 0;
+    if (!highScore || score > highScore) {
+      localStorage.setItem("highscore", score);
+    }
   }
 
   const getRandomTrack = (songs) => {
@@ -230,7 +237,9 @@ function HighLow(props) {
       {gameActive && gameLoaded &&
       <div className = "HighLow" style={{backgroundColor: bgColor, height: heightt}}>
         <Row >    
-          <Col sm="1"> </Col> 
+          <Col sm="1" style={{color:'white'}}> 
+            <p>Score: {score}</p>
+          </Col> 
           <Col sm="4">
             <Card body style={{backgroundColor: bgColor, marginTop: '30%', color:'white', border:'none'}}> 
               <CardTitle tag="h1">
@@ -255,9 +264,7 @@ function HighLow(props) {
             </Card>
           </Col>
           
-          <Col sm="2" style={{backgroundColor: bgColor, color:'white'}}>
-            <h5>Score: {score}</h5>
-
+          <Col sm="2" style={{backgroundColor: bgColor, color:'white', paddingTop:'2vh'}}>
             <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
               <VolumeOffIcon />
               <Slider
@@ -274,7 +281,7 @@ function HighLow(props) {
               <VolumeUp />
             </Stack>
 
-            <h1 style={{position:'relative', top:'40vh', justifyContent:'center'}}>VS</h1>
+            <h1 style={{position:'relative', top:'40vh'}}>VS</h1>
             
           </Col>
 
@@ -320,8 +327,8 @@ function HighLow(props) {
               </CardText>
             </Card>
           </Col>
-          <Col sm="1"> 
-            
+          <Col sm="1" style={{color:'white'}}>
+            <p>Best: {highscore}</p>
           </Col> 
           
         </Row>
