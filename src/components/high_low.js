@@ -31,7 +31,7 @@ function HighLow(props) {
   const [rightTrack, setRightTrack] = useState('');
   const [score, setScore] = useState(0);
   const [highscore, sethighscore] = useState(0);
-  const [curSong, setCurSong] = useState('');
+  const [curSong, setCurSong] = useState(null);
   const [volume, setVolume] = useState(0.4);
   const [transition, setTransition] = useState(false);
 
@@ -83,6 +83,10 @@ function HighLow(props) {
   }
 
   const handleRestart = () => {
+    if (curSong && curSong.sound) {
+      curSong.sound.stop();
+      setCurSong(null);
+    }
     updateHighScore(score)
     setScore(0)
     setGameActive(true)
@@ -108,6 +112,10 @@ function HighLow(props) {
   }
 
   const handleHigher = async(left, right) => {
+    if (curSong && curSong.sound) {
+      curSong.sound.stop();
+      setCurSong(null);
+    }
     setTransition(true)
     await sleep(duration*1000 + 750)
     setTransition(false)
@@ -122,6 +130,10 @@ function HighLow(props) {
   }
 
   const handleLower = async(left, right) => {
+    if (curSong && curSong.sound) {
+      curSong.sound.stop();
+      setCurSong(null);
+    }
     setTransition(true)
     await sleep(duration*1000 + 750)
     setTransition(false)
@@ -200,24 +212,22 @@ function HighLow(props) {
   }
 
   const handlePlay = (src) => {
+    if (curSong && curSong.sound && curSong.sound.playing()) {
+      curSong.sound.stop();
+    }
     const sound = new Howl ({
       src,
       html5: true,
     });
     sound.play();
-    setCurSong(sound);
+    setCurSong({ sound: sound, src: src });
   }
 
   const handlePause = () => {
-    curSong.pause()
-    setCurSong('');
-  }
-
-  const isSomethingPlaying = () => {
-    if (curSong === ''){
-      return false
+    if (curSong && curSong.sound) {
+      curSong.sound.pause();
     }
-    return true
+    setCurSong(null);
   }
 
   const handleVolume = (newVolume) => {
@@ -252,13 +262,15 @@ function HighLow(props) {
 
                 <h4>Popularity Score: {leftTrack.track.popularity}</h4> <br/>  
 
-                {leftTrack?.track?.preview_url && !(isSomethingPlaying()) && 
-                <PlayCircleOutlineIcon onClick = {() => handlePlay(leftTrack?.track?.preview_url)}/>     
-                }
-
-                {leftTrack?.track?.preview_url && isSomethingPlaying() &&  
-                <PauseCircleOutlineIcon onClick = {() => handlePause()}/>
-                }  
+                {leftTrack?.track?.preview_url ? (
+                  curSong && curSong.src === leftTrack.track.preview_url && curSong.sound && curSong.sound.playing() ? (
+                    <PauseCircleOutlineIcon onClick={() => handlePause()} />
+                  ) : (
+                    <PlayCircleOutlineIcon onClick={() => handlePlay(leftTrack.track.preview_url)} />
+                  )
+                ) : (
+                  <span style={{ fontSize: '0.8em', color: 'grey' }}>Preview not available</span>
+                )}
 
               </CardText>
             </Card>
@@ -296,17 +308,15 @@ function HighLow(props) {
                 
                 <h4>Popularity Score: {transition ? <CountUp duration={duration} end={rightTrack.track.popularity}/> : '???'}</h4> <br/>  
 
-                {rightTrack?.track?.preview_url && !(isSomethingPlaying()) && 
-                <PlayCircleOutlineIcon onClick = {() => handlePlay(rightTrack?.track?.preview_url)}/> 
-                }
-
-                {rightTrack?.track?.preview_url && isSomethingPlaying() &&  
-                <PauseCircleOutlineIcon onClick = {() => handlePause()}/>     
-                }
-
-                {!rightTrack?.track?.preview_url &&  
-                <PauseCircleOutlineIcon style={{color:bgColor}}/>     
-                }
+                {rightTrack?.track?.preview_url ? (
+                  curSong && curSong.src === rightTrack.track.preview_url && curSong.sound && curSong.sound.playing() ? (
+                    <PauseCircleOutlineIcon onClick={() => handlePause()} />
+                  ) : (
+                    <PlayCircleOutlineIcon onClick={() => handlePlay(rightTrack.track.preview_url)} />
+                  )
+                ) : (
+                  <span style={{ fontSize: '0.8em', color: 'grey' }}>Preview not available</span>
+                )}
 
                 <br />
                 <br />
