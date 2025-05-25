@@ -7,14 +7,10 @@ import { Card } from 'reactstrap';
 import { Col } from 'reactstrap';
 import { CardTitle } from 'reactstrap';
 import { CardText } from 'reactstrap';
-import {Howl, Howler} from "howler";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import CountUp from 'react-countup';
 import Stack from '@mui/material/Stack';
-import Slider from '@mui/material/Slider';
-import VolumeOffIcon from '@mui/icons-material/VolumeOff';
-import VolumeUp from '@mui/icons-material/VolumeUp';
 
 function HighLow(props) {
 
@@ -31,8 +27,6 @@ function HighLow(props) {
   const [rightTrack, setRightTrack] = useState('');
   const [score, setScore] = useState(0);
   const [highscore, sethighscore] = useState(0);
-  const [curSong, setCurSong] = useState(null);
-  const [volume, setVolume] = useState(0.4);
   const [transition, setTransition] = useState(false);
 
 
@@ -67,7 +61,6 @@ function HighLow(props) {
   useEffect (() => {
     if (tracksFlag === true && playlists !== [] && token !== "") {
       //console.log("tracks: " + tracks.length, tracks)
-      Howler.volume(volume/divider);
       setGameActive(true)
       setGameLoaded(true)
       startGame(tracks) 
@@ -83,10 +76,6 @@ function HighLow(props) {
   }
 
   const handleRestart = () => {
-    if (curSong && curSong.sound) {
-      curSong.sound.stop();
-      setCurSong(null);
-    }
     updateHighScore(score)
     setScore(0)
     setGameActive(true)
@@ -112,10 +101,6 @@ function HighLow(props) {
   }
 
   const handleHigher = async(left, right) => {
-    if (curSong && curSong.sound) {
-      curSong.sound.stop();
-      setCurSong(null);
-    }
     setTransition(true)
     await sleep(duration*1000 + 750)
     setTransition(false)
@@ -130,10 +115,6 @@ function HighLow(props) {
   }
 
   const handleLower = async(left, right) => {
-    if (curSong && curSong.sound) {
-      curSong.sound.stop();
-      setCurSong(null);
-    }
     setTransition(true)
     await sleep(duration*1000 + 750)
     setTransition(false)
@@ -211,31 +192,6 @@ function HighLow(props) {
     return new Promise((resolve)=>setTimeout(resolve,time))
   }
 
-  const handlePlay = (src) => {
-    if (curSong && curSong.sound && curSong.sound.playing()) {
-      curSong.sound.stop();
-    }
-    const sound = new Howl ({
-      src,
-      html5: true,
-    });
-    sound.play();
-    setCurSong({ sound: sound, src: src });
-  }
-
-  const handlePause = () => {
-    if (curSong && curSong.sound) {
-      curSong.sound.pause();
-    }
-    setCurSong(null);
-  }
-
-  const handleVolume = (newVolume) => {
-    // console.log(newVolume)
-    setVolume(newVolume)
-    Howler.volume(newVolume/divider);
-  }
-
   const bgColor = "#1A1A1A"; //#1A1A1A
   const heightt = "100vh";
   const duration = 0.5;
@@ -254,7 +210,15 @@ function HighLow(props) {
             <Card body style={{backgroundColor: bgColor, marginTop: '30%', color:'white', border:'none'}}> 
               <CardTitle tag="h1">
                 <img src={leftTrack?.track?.album.images[1].url} alt=""/> <br/>
-                {leftTrack?.track?.name} 
+                <span style={{
+                  display: 'block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {leftTrack?.track?.name}
+                </span>
               </CardTitle>
               <CardText>
                 by <br/>
@@ -262,12 +226,8 @@ function HighLow(props) {
 
                 <h4>Popularity Score: {leftTrack.track.popularity}</h4> <br/>  
 
-                {leftTrack?.track?.preview_url ? (
-                  curSong && curSong.src === leftTrack.track.preview_url && curSong.sound && curSong.sound.playing() ? (
-                    <PauseCircleOutlineIcon onClick={() => handlePause()} />
-                  ) : (
-                    <PlayCircleOutlineIcon onClick={() => handlePlay(leftTrack.track.preview_url)} />
-                  )
+                {leftTrack?.track?.id ? (
+                  <iframe src={`https://open.spotify.com/embed/track/${leftTrack.track.id}`} width="100%" height="80" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 ) : (
                   <span style={{ fontSize: '0.8em', color: 'grey' }}>Preview not available</span>
                 )}
@@ -277,21 +237,6 @@ function HighLow(props) {
           </Col>
           
           <Col sm="2" style={{backgroundColor: bgColor, color:'white', paddingTop:'4vh'}}>
-            <Stack spacing={2} direction="row" sx={{ mb: 1 }} alignItems="center">
-              <VolumeOffIcon />
-              <Slider
-                aria-label="Volume"
-                defaultValue={0.1}
-                step={0.1}
-                marks
-                min={0}
-                max={1}
-                value={volume}
-                onChange = {(e) => handleVolume(e.target.value)}
-              />
-              <VolumeUp />
-            </Stack>
-
             <h1 style={{position:'relative', top:'40vh'}}>VS</h1>
             
           </Col>
@@ -300,7 +245,15 @@ function HighLow(props) {
             <Card body style={{backgroundColor: bgColor, marginTop: '30%', color:'white', border:'none'}}>
               <CardTitle tag="h1">
                 <img src={rightTrack?.track?.album.images[1].url} alt=""/> <br/>
-                {rightTrack?.track?.name}
+                <span style={{
+                  display: 'block',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {rightTrack?.track?.name}
+                </span>
               </CardTitle>
               <CardText> 
                 by <br/>
@@ -308,12 +261,8 @@ function HighLow(props) {
                 
                 <h4>Popularity Score: {transition ? <CountUp duration={duration} end={rightTrack.track.popularity}/> : '???'}</h4> <br/>  
 
-                {rightTrack?.track?.preview_url ? (
-                  curSong && curSong.src === rightTrack.track.preview_url && curSong.sound && curSong.sound.playing() ? (
-                    <PauseCircleOutlineIcon onClick={() => handlePause()} />
-                  ) : (
-                    <PlayCircleOutlineIcon onClick={() => handlePlay(rightTrack.track.preview_url)} />
-                  )
+                {rightTrack?.track?.id ? (
+                  <iframe src={`https://open.spotify.com/embed/track/${rightTrack.track.id}`} width="100%" height="80" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 ) : (
                   <span style={{ fontSize: '0.8em', color: 'grey' }}>Preview not available</span>
                 )}
